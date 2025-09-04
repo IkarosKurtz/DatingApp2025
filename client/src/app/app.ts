@@ -10,7 +10,7 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App implements OnInit {
   private http: HttpClient = inject(HttpClient);
-  protected readonly title = signal('My App');
+  protected readonly title = signal('APPsito');
 
   public ngOnInit(): void {
     this.http.get('https://localhost:5001/members').subscribe({

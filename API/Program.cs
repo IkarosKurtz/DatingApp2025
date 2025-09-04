@@ -13,8 +13,18 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
 
 var app = builder.Build();
+
+app.UseCors(opt =>
+{
+    opt.AllowAnyOrigin()
+       .WithOrigins(
+        "http://localhost:4200",
+        "https://localhost:4200"
+    );
+});
 
 // No lo queremos por ahora o quizas nunca
 /* // Configure the HTTP request pipeline.
