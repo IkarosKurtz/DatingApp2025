@@ -1,5 +1,14 @@
 <main class="main">
-  <h1>{{ title() }}</h1>
+  <h1 class="text-4xl">{{ title() }}</h1>
+  <button class="btn btn-info" (click)="setMembers()">Get Members</button>
+  <ul class="list">
+    @for (member of members(); track member.id) {
+    <li class="list-row">
+      <span class="italic text-md">{{ member.id }}</span>
+      <span class="bold text-xl">{{ member.displayName }}</span>
+    </li>
+    }
+  </ul>
 </main>
 
 <router-outlet />
