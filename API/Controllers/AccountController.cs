@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
 using API.Entities;
@@ -25,12 +21,31 @@ public class AccountController(AppDbContext context) : BaseApiController
         {
             DisplayName = request.DisplayName,
             Email = request.Email,
-            passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(request.Password)),
-            passwordSalt = hmac.Key
+            PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(request.Password)),
+            PasswordSalt = hmac.Key
         };
 
         context.Users.Add(user);
         await context.SaveChangesAsync();
+
+        return user;
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<AppUser>> Login(LoginRequest request)
+    {
+        var user = await context.Users.SingleOrDefaultAsync(x => x.Email == request.Email);
+
+        if (user == null) return Unauthorized("Invalid email or password");
+
+        using var hmac = new HMACSHA512(user.PasswordSalt);
+
+        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(request.Password));
+
+        for (int i = 0; i < computedHash.Length; i++)
+        {
+            if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid email or password");
+        }
 
         return user;
     }
