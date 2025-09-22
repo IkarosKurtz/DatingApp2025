@@ -24,12 +24,24 @@
     </nav>
 
     <div class="flex align-middle ml-auto gap-3">
-      <form class="flex items-center gap-3">
-        <input type="text" class="input" placeholder="Email" />
+      <form #loginForm="ngForm" (ngSubmit)="login()" class="input" class="flex items-center gap-3">
+        <input
+          [(ngModel)]="creds.email"
+          name="email"
+          type="text"
+          class="input"
+          placeholder="Email"
+        />
 
-        <input type="password" class="input" placeholder="Password" />
+        <input
+          [(ngModel)]="creds.password"
+          name="password"
+          type="password"
+          class="input"
+          placeholder="Password"
+        />
 
-        <button class="btn">Login</button>
+        <button type="submit" class="btn">Login</button>
       </form>
     </div>
   </div>
