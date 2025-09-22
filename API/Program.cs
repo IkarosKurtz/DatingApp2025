@@ -36,7 +36,7 @@ var app = builder.Build();
 
 app.UseCors(opt =>
 {
-    opt.AllowAnyOrigin()
+    opt.AllowAnyHeader().AllowAnyOrigin()
        .WithOrigins(
         "http://localhost:4200",
         "https://localhost:4200"
@@ -53,8 +53,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 */
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
