@@ -8,7 +8,7 @@ import { AccountService } from '../../core/services/account-service';
   styleUrl: './nav.css',
 })
 export class Nav {
-  private accountService = inject(AccountService);
+  protected accountService = inject(AccountService);
   protected creds: any = {};
   protected isLoggedIn: WritableSignal<boolean> = signal(false);
 
@@ -18,13 +18,13 @@ export class Nav {
       .subscribe({
         next: (res) => {
           console.log(res);
-          this.isLoggedIn.set(true);
+          this.creds = {};
         },
         error: (err) => alert(err.message),
       });
   }
 
   public logout() {
-    this.isLoggedIn.set(false);
+    this.accountService.logout();
   }
 }
