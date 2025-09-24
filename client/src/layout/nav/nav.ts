@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../core/services/account-service';
 @Component({
@@ -10,13 +10,21 @@ import { AccountService } from '../../core/services/account-service';
 export class Nav {
   private accountService = inject(AccountService);
   protected creds: any = {};
+  protected isLoggedIn: WritableSignal<boolean> = signal(false);
 
   public login() {
     this.accountService
       .login({ Email: this.creds.email, Password: this.creds.password })
       .subscribe({
-        next: (res) => console.log(res),
+        next: (res) => {
+          console.log(res);
+          this.isLoggedIn.set(true);
+        },
         error: (err) => alert(err.message),
       });
+  }
+
+  public logout() {
+    this.isLoggedIn.set(false);
   }
 }
