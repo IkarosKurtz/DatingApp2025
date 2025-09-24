@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { AccountService } from '../core/services/account-service';
+import { Home } from '../features/home/home';
 import { Nav } from '../layout/nav/nav';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Nav],
+  imports: [Nav, Home],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
