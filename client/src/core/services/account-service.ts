@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { tap } from 'rxjs';
-import { IUser } from '../../types/user';
+import { User } from '../../types/user';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,7 @@ import { IUser } from '../../types/user';
 export class AccountService {
   private http = inject(HttpClient);
   public baseURL = 'https://localhost:5001/api/';
-  public currentUser: WritableSignal<IUser | null> = signal(null);
+  public currentUser: WritableSignal<User | null> = signal(null);
 
   public login(creds: any) {
     return this.http.post(this.baseURL + 'account/login', creds).pipe(

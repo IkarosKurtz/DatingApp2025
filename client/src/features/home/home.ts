@@ -12,7 +12,7 @@ export class Home {
   @Input({ required: true }) membersFromApp: User[] = [];
   protected registerMode: WritableSignal<boolean> = signal(false);
 
-  public showRegister(): void {
-    this.registerMode.set(true);
+  public showRegister(value: boolean): void {
+    this.registerMode.set(value);
   }
 }
