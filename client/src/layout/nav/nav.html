@@ -1,6 +1,10 @@
-<header class="p-3 w-full fixed top-0 z-50 bg-gradient-to-r from-primary to-black">
+<header
+  class="p-3 w-full fixed top-0 z-50 bg-gradient-to-r from-primary to-black"
+>
   <div class="flex align-middle items-center px-10 mx-auto gap-6">
-    <a class="flex items-center gap-2 max-h-16 text-white border-r-white border-r-2 pr-6">
+    <a
+      class="flex items-center gap-2 max-h-16 text-white border-r-white border-r-2 pr-6"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -28,7 +32,11 @@
           role="button"
           class="flex items-center text-white text-xl gap-3 cursor-pointer"
         >
-          <img src="./user.jpg" alt="user avatar" class="w-8 h-8 rounded-full" />
+          <img
+            src="./user.jpg"
+            alt="user avatar"
+            class="w-8 h-8 rounded-full"
+          />
           <span>{{ user.displayName }}</span>
         </div>
         <ul
@@ -40,7 +48,12 @@
         </ul>
       </div>
       } @else {
-      <form #loginForm="ngForm" (ngSubmit)="login()" class="input" class="flex items-center gap-3">
+      <form
+        #loginForm="ngForm"
+        (ngSubmit)="login()"
+        class="input"
+        class="flex items-center gap-3"
+      >
         <input
           [(ngModel)]="creds.email"
           name="email"
@@ -57,7 +70,12 @@
           placeholder="Password"
         />
 
-        <button type="submit" class="btn">Login</button>
+        <button
+          type="submit"
+          class="btn"
+        >
+          Login
+        </button>
       </form>
       }
     </div>

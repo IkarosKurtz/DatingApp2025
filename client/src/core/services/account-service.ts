@@ -15,10 +15,14 @@ export class AccountService {
     return this.http.post(this.baseURL + 'account/login', creds).pipe(
       tap((response: any) => {
         if (!response) return;
-        localStorage.setItem('user', JSON.stringify(response));
-        this.currentUser.set(response);
+        this.setCurrentUser(response);
       })
     );
+  }
+
+  public setCurrentUser(user: User) {
+    localStorage.setItem('user', JSON.stringify(user));
+    this.currentUser.set(user);
   }
 
   public logout() {
