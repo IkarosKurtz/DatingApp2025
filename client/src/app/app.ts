@@ -1,21 +1,23 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
-import { AccountService } from '../core/services/account-service';
-import { Home } from '../features/home/home';
-import { Nav } from '../layout/nav/nav';
-import { User } from '../types/user';
+import { NgClass } from "@angular/common";
+import { HttpClient } from "@angular/common/http";
+import { Component, inject, OnInit, signal } from "@angular/core";
+import { Router, RouterOutlet } from "@angular/router";
+import { lastValueFrom } from "rxjs";
+import { AccountService } from "../core/services/account-service";
+import { Nav } from "../layout/nav/nav";
+import { User } from "../types/user";
 
 @Component({
-  selector: 'app-root',
-  imports: [Nav, Home],
-  templateUrl: './app.html',
-  styleUrl: './app.css',
+  selector: "app-root",
+  imports: [Nav, NgClass, RouterOutlet],
+  templateUrl: "./app.html",
+  styleUrl: "./app.css",
 })
 export class App implements OnInit {
   private http: HttpClient = inject(HttpClient);
   private accountService: AccountService = inject(AccountService);
-  protected readonly title = signal('APPsito');
+  protected router = inject(Router);
+  protected readonly title = signal("APPsito");
   protected members = signal<User[]>([]);
 
   public ngOnInit(): void {
@@ -23,7 +25,7 @@ export class App implements OnInit {
   }
 
   private setCurrentUser() {
-    const userString = localStorage.getItem('user');
+    const userString = localStorage.getItem("user");
     if (!userString) return;
 
     const user = JSON.parse(userString);
@@ -39,7 +41,9 @@ export class App implements OnInit {
 
   public async getMembers(): Promise<User[]> {
     try {
-      return await lastValueFrom(this.http.get<User[]>('https://localhost:5001/api/members'));
+      return await lastValueFrom(
+        this.http.get<User[]>("https://localhost:5001/api/members")
+      );
     } catch (error) {
       console.log(error);
       throw error;
