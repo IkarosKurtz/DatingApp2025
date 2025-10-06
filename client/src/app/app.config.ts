@@ -5,7 +5,7 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from "@angular/core";
-import { provideRouter } from "@angular/router";
+import { provideRouter, withViewTransitions } from "@angular/router";
 
 import { provideHttpClient } from "@angular/common/http";
 import { lastValueFrom } from "rxjs";
@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(routes),
+    provideRouter(routes, withViewTransitions()),
     provideHttpClient(),
     provideAppInitializer(() => {
       const initService = inject(InitService);
