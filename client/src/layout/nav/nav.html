@@ -3,6 +3,8 @@
 >
   <div class="flex align-middle items-center px-10 mx-auto gap-6">
     <a
+      routerLink="/"
+      routerLinkActive="text-accent"
       class="flex items-center gap-2 max-h-16 text-white border-r-white border-r-2 pr-6"
     >
       <svg
@@ -19,9 +21,21 @@
     </a>
 
     <nav class="flex gap-3 my-2 uppercase text-lg text-white">
-      <a>Matches</a>
-      <a>Lists</a>
-      <a>Messages</a>
+      <a
+        routerLink="/members"
+        routerLinkActive="text-accent"
+        >Matches</a
+      >
+      <a
+        routerLink="/lists"
+        routerLinkActive="text-accent"
+        >Lists</a
+      >
+      <a
+        routerLink="/messages"
+        routerLinkActive="text-accent"
+        >Messages</a
+      >
     </nav>
 
     <div class="flex align-middle ml-auto gap-3">
