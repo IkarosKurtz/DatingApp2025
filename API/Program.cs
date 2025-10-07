@@ -1,6 +1,7 @@
 using System.Text;
 using API.Data;
 using API.Interfaces;
+using API.Middlewares;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
-    opt.UseSqlite(builder.Configuration.GetConnectionString("SQLiteConnection"));
+  opt.UseSqlite(builder.Configuration.GetConnectionString("SQLiteConnection"));
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -22,25 +23,26 @@ builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
-    var tokenKey = builder.Configuration["TokenKey"] ?? throw new ArgumentNullException("TokenKey not found in configuration.");
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
-        ValidateIssuer = false,
-        ValidateAudience = false
-    };
+  var tokenKey = builder.Configuration["TokenKey"] ?? throw new ArgumentNullException("TokenKey not found in configuration.");
+  options.TokenValidationParameters = new TokenValidationParameters
+  {
+    ValidateIssuerSigningKey = true,
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
+    ValidateIssuer = false,
+    ValidateAudience = false
+  };
 });
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(opt =>
 {
-    opt.AllowAnyHeader().AllowAnyOrigin()
-       .WithOrigins(
-        "http://localhost:4200",
-        "https://localhost:4200"
-    );
+  opt.AllowAnyHeader().AllowAnyOrigin()
+     .WithOrigins(
+      "http://localhost:4200",
+      "https://localhost:4200"
+  );
 });
 
 // No lo queremos por ahora o quizas nunca
