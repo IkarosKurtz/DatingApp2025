@@ -7,11 +7,11 @@ namespace API.Controllers
     [HttpGet("bad-request")]
     public IActionResult GetBadRequest()
     {
-      var inputParam = -1;
-      if (inputParam < 0)
-      {
-        throw new ArgumentOutOfRangeException(nameof(inputParam));
-      }
+      // var inputParam = -1;
+      // if (inputParam < 0)
+      // {
+      //   throw new ArgumentOutOfRangeException(nameof(inputParam));
+      // }
 
       return BadRequest("Bad Request");
     }

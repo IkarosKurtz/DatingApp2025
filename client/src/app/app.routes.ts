@@ -5,6 +5,7 @@ import { Lists } from "../features/lists/lists";
 import { MemberDetail } from "../features/members/member-detail/member-detail";
 import { MemberList } from "../features/members/member-list/member-list";
 import { Messages } from "../features/messages/messages";
+import { NotFound } from "../features/not-found/not-found";
 import { TestErrors } from "../features/test-errors/test-errors";
 
 export const routes: Routes = [
@@ -21,5 +22,5 @@ export const routes: Routes = [
     ],
   },
   { path: "errors", component: TestErrors },
-  { path: "**", component: Home },
+  { path: "**", component: NotFound },
 ];
