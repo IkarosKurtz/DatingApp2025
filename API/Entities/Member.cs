@@ -7,6 +7,7 @@ namespace API.Entities
   {
     public string Id { get; set; } = null!; // This will be the same as AppUser.Id
     public DateOnly Birthday { get; set; }
+    public string? ImageUrl { get; set; }
     public required string DisplayName { get; set; }
     public DateTime Created { get; set; } = DateTime.UtcNow;
     public DateTime LastActive { get; set; } = DateTime.UtcNow;
@@ -19,5 +20,6 @@ namespace API.Entities
     [ForeignKey(nameof(Id))]
     public AppUser User { get; set; } = null!;
 
+    public List<Photo> Photos { get; set; } = [];
   }
 }

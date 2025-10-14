@@ -8,5 +8,6 @@ namespace API.Entities
 
     // Navigation Properties
     public Member Member { get; set; } = null!;
+    public string MemberId { get; set; } = null!;
   }
 }
