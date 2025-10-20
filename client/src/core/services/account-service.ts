@@ -17,7 +17,7 @@ export class AccountService {
       tap((response) => {
         if (!response) return;
         this.setCurrentUser(response);
-      })
+      }),
     );
   }
 
@@ -31,7 +31,7 @@ export class AccountService {
       tap((user) => {
         if (!user) return;
         this.setCurrentUser(user);
-      })
+      }),
     );
   }
 

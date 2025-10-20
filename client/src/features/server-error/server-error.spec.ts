@@ -1,23 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ServerError } from './server-error';
+import { ServerError } from "./server-error";
 
-describe('ServerError', () => {
+describe("ServerError", () => {
   let component: ServerError;
   let fixture: ComponentFixture<ServerError>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ServerError]
-    })
-    .compileComponents();
+      imports: [ServerError],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ServerError);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

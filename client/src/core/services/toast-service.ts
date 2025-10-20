@@ -21,7 +21,7 @@ export class ToastService {
   private createToastElement(
     message: string,
     alertClass: string,
-    duration = 5000
+    duration = 5000,
   ) {
     const toastContainer = document.getElementById("toast-container");
     if (!toastContainer) return;

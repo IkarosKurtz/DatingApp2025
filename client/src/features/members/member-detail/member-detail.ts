@@ -1,11 +1,9 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-member-detail',
+  selector: "app-member-detail",
   imports: [],
-  templateUrl: './member-detail.html',
-  styleUrl: './member-detail.css'
+  templateUrl: "./member-detail.html",
+  styleUrl: "./member-detail.css",
 })
-export class MemberDetail {
-
-}
+export class MemberDetail {}
