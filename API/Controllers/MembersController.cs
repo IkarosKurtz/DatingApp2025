@@ -1,4 +1,5 @@
 using API.Entities;
+using API.Mappers;
 using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ public class MembersController(IMembersRepository membersRep) : BaseApiControlle
     var member = await membersRep.GetMemberAsync(id);
     if (member == null) return NotFound();
 
-    return Ok(member);
+    return Ok(member.ToResponse());
   }
 
   [HttpGet("{id}/photos")]
