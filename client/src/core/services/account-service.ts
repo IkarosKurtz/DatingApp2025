@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable, signal, WritableSignal } from "@angular/core";
 import { Observable, tap } from "rxjs";
+import { environment } from "../../environments/environment";
 import { LoginCreds, RegisterCreds, User } from "../../types/user";
 
 @Injectable({
@@ -8,7 +9,7 @@ import { LoginCreds, RegisterCreds, User } from "../../types/user";
 })
 export class AccountService {
   private http = inject(HttpClient);
-  public baseURL = "https://localhost:5001/api/";
+  public baseURL = environment.apiUrl;
   public currentUser: WritableSignal<User | null> = signal(null);
 
   public login(creds: LoginCreds): Observable<User> {
