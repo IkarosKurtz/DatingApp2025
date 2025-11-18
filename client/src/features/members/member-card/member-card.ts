@@ -1,6 +1,6 @@
 import { Component, input } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { Member } from "../types/member";
+import { Member } from "../../../types/member";
 
 @Component({
   selector: "app-member-card",

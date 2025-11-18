@@ -4,13 +4,14 @@ import { Home } from "../features/home/home";
 import { Lists } from "../features/lists/lists";
 import { MemberDetail } from "../features/members/member-detail/member-detail";
 import { MemberList } from "../features/members/member-list/member-list";
+import { MemberMessages } from "../features/members/member-messages/member-messages";
+import { MemberPhotos } from "../features/members/member-photos/member-photos";
+import { MemberProfile } from "../features/members/member-profile/member-profile";
+import { memberResolver } from "../features/members/member-resolver";
 import { Messages } from "../features/messages/messages";
 import { NotFound } from "../features/not-found/not-found";
 import { ServerError } from "../features/server-error/server-error";
 import { TestErrors } from "../features/test-errors/test-errors";
-import { MemberMessages } from "../member-messages/member-messages";
-import { MemberPhotos } from "../member-photos/member-photos";
-import { MemberProfile } from "../member-profile/member-profile";
 
 export const routes: Routes = [
   { path: "", component: Home },
@@ -22,6 +23,8 @@ export const routes: Routes = [
       { path: "members", component: MemberList },
       {
         path: "members/:id",
+        resolve: { member: memberResolver },
+        runGuardsAndResolvers: "always",
         component: MemberDetail,
         children: [
           { path: "", redirectTo: "profile", pathMatch: "full" },

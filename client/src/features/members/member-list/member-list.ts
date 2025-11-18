@@ -2,8 +2,8 @@ import { AsyncPipe } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { MembersService } from "../../../core/services/members-service";
-import { MemberCard } from "../../../member-card/member-card";
 import { Member } from "../../../types/member";
+import { MemberCard } from "../../members/member-card/member-card";
 
 @Component({
   selector: "app-member-list",
