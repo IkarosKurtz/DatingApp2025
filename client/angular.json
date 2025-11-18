@@ -6,6 +6,10 @@
     "client": {
       "projectType": "application",
       "schematics": {
+        "@schematics/angular:pipe": {
+          "skipImport": false,
+          "path": "src/core/pipes"
+        },
         "@schematics/angular:resolver": {
           "path": "src",
           "skipTests": false

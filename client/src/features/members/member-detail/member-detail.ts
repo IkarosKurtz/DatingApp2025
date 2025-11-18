@@ -8,11 +8,12 @@ import {
   RouterOutlet,
 } from "@angular/router";
 import { filter } from "rxjs";
+import { AgePipe } from "../../../core/pipes/age-pipe";
 import { Member } from "../../../types/member";
 
 @Component({
   selector: "app-member-detail",
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, AgePipe],
   templateUrl: "./member-detail.html",
   styleUrl: "./member-detail.css",
 })
