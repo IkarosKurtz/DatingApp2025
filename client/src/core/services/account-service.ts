@@ -1,15 +1,15 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable, signal, WritableSignal } from "@angular/core";
 import { Observable, tap } from "rxjs";
-import { RegisterCreds } from "../../types/registerCreds";
-import { LoginCreds, User } from "../../types/user";
+import { environment } from "../../environments/environment";
+import { LoginCreds, RegisterCreds, User } from "../../types/user";
 
 @Injectable({
   providedIn: "root",
 })
 export class AccountService {
   private http = inject(HttpClient);
-  public baseURL = "https://localhost:5001/api/";
+  public baseURL = environment.apiUrl;
   public currentUser: WritableSignal<User | null> = signal(null);
 
   public login(creds: LoginCreds): Observable<User> {
@@ -17,7 +17,7 @@ export class AccountService {
       tap((response) => {
         if (!response) return;
         this.setCurrentUser(response);
-      }),
+      })
     );
   }
 
@@ -31,7 +31,7 @@ export class AccountService {
       tap((user) => {
         if (!user) return;
         this.setCurrentUser(user);
-      }),
+      })
     );
   }
 

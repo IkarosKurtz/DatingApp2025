@@ -7,30 +7,26 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [Authorize]
-public class MembersController(IMembersRepository membersRep) : BaseApiController
+public class MembersController(IMembersRepository membersRepository) : BaseApiController
 {
   [HttpGet]
   public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers()
   {
-    return Ok(await membersRep.GetMembersAsync());
+    return Ok(await membersRepository.GetMembersAsync());
   }
 
-  [AllowAnonymous]
   [HttpGet("{id}")]
   public async Task<ActionResult<Member>> GetMember(string id)
   {
-    var member = await membersRep.GetMemberAsync(id);
+    var member = await membersRepository.GetMemberAsync(id);
     if (member == null) return NotFound();
 
-    return Ok(member.ToResponse());
+    return member.ToResponse();
   }
 
   [HttpGet("{id}/photos")]
   public async Task<ActionResult<IReadOnlyList<Photo>>> GetPhotos(string id)
   {
-    var photos = await membersRep.GetPhotosAsync(id);
-    if (photos == null || !photos.Any()) return NotFound();
-
-    return Ok(photos);
+    return Ok(await membersRepository.GetPhotosAsync(id));
   }
 }
