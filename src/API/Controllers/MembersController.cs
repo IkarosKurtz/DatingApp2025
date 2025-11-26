@@ -15,14 +15,13 @@ public class MembersController(IMembersRepository membersRep) : BaseApiControlle
     return Ok(await membersRep.GetMembersAsync());
   }
 
-  [AllowAnonymous]
   [HttpGet("{id}")]
   public async Task<ActionResult<Member>> GetMember(string id)
   {
     var member = await membersRep.GetMemberAsync(id);
     if (member == null) return NotFound();
 
-    return Ok(member.ToResponse());
+    return member.ToResponse();
   }
 
   [HttpGet("{id}/photos")]
