@@ -7,148 +7,147 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 
-namespace API.UnitTest.Controllers
+namespace API.UnitTest.Controllers;
+
+public class MembersControllerTest
 {
-  public class MembersControllerTest
+  private MembersController _membersController;
+  private IMembersRepository _mockMembersRepository;
+  private const int NOT_FOUND = 404;
+  private const string NOT_FOUND_ERROR_MESSAGE = "Expected NotFoundObjectResult but got something else";
+  private const string OK_ERROR_MESSAGE = "Expected OkObjectResult but got something else";
+
+
+  [SetUp]
+  public void Setup()
   {
-    private MembersController _membersController;
-    private IMembersRepository _mockMembersRepository;
-    private const int NOT_FOUND = 404;
-    private const string NOT_FOUND_ERROR_MESSAGE = "Expected NotFoundObjectResult but got something else";
-    private const string OK_ERROR_MESSAGE = "Expected OkObjectResult but got something else";
+    _mockMembersRepository = Substitute.For<IMembersRepository>();
+    _membersController = new MembersController(_mockMembersRepository);
 
-
-    [SetUp]
-    public void Setup()
+    var userId = "userId";
+    DefaultHttpContext testHttpContext = new()
     {
-      _mockMembersRepository = Substitute.For<IMembersRepository>();
-      _membersController = new MembersController(_mockMembersRepository);
-
-      var userId = "userId";
-      DefaultHttpContext testHttpContext = new()
-      {
-        User = new ClaimsPrincipal(new ClaimsIdentity([
-              new Claim("email", userId)
-          ]))
-      };
-      _membersController.ControllerContext = new ControllerContext
-      {
-        HttpContext = testHttpContext
-      };
-    }
-
-    private static Member GetTestMember()
+      User = new ClaimsPrincipal(new ClaimsIdentity([
+            new Claim("email", userId)
+        ]))
+    };
+    _membersController.ControllerContext = new ControllerContext
     {
-      return new Member
-      {
-        Id = "test-id",
-        Birthday = DateOnly.Parse("2000-01-01"),
-        ImageUrl = null,
-        DisplayName = "Test",
-        Created = DateTime.UtcNow,
-        LastActive = DateTime.UtcNow,
-        Gender = "Gender",
-        Description = "Description",
-        City = "City",
-        Country = "Country",
-        User = null!,
-        Photos = []
-      };
-    }
+      HttpContext = testHttpContext
+    };
+  }
 
-    private static Photo GetTestPhoto()
+  private static Member GetTestMember()
+  {
+    return new Member
     {
-      return new Photo()
-      {
-        Id = 1,
-        Url = "Url",
-        PublicId = "",
-        Member = GetTestMember(),
-        MemberId = GetTestMember().Id
-      };
-    }
+      Id = "test-id",
+      Birthday = DateOnly.Parse("2000-01-01"),
+      ImageUrl = null,
+      DisplayName = "Test",
+      Created = DateTime.UtcNow,
+      LastActive = DateTime.UtcNow,
+      Gender = "Gender",
+      Description = "Description",
+      City = "City",
+      Country = "Country",
+      User = null!,
+      Photos = []
+    };
+  }
 
-    [Test]
-    public async Task GetMembers_Valid_ReturnMembers()
+  private static Photo GetTestPhoto()
+  {
+    return new Photo()
     {
-      // Arrange
-      IReadOnlyList<Member> expectedMembers = [GetTestMember()];
+      Id = 1,
+      Url = "Url",
+      PublicId = "",
+      Member = GetTestMember(),
+      MemberId = GetTestMember().Id
+    };
+  }
 
-      _mockMembersRepository.GetMembersAsync().Returns(expectedMembers);
+  [Test]
+  public async Task GetMembers_Valid_ReturnMembers()
+  {
+    // Arrange
+    IReadOnlyList<Member> expectedMembers = [GetTestMember()];
 
-      // Act & Assert
-      var membersResult = await _membersController.GetMembers();
-      var okResult = membersResult.Result as OkObjectResult;
-      Assert.That(okResult, Is.Not.Null, OK_ERROR_MESSAGE);
+    _mockMembersRepository.GetMembersAsync().Returns(expectedMembers);
 
-      var members = okResult.Value as IReadOnlyList<Member>;
-      Assert.That(members, Is.Not.Null);
-      Assert.Multiple(() =>
-      {
-        Assert.That(members, Has.Count.EqualTo(1));
-      });
-    }
+    // Act & Assert
+    var membersResult = await _membersController.GetMembers();
+    var okResult = membersResult.Result as OkObjectResult;
+    Assert.That(okResult, Is.Not.Null, OK_ERROR_MESSAGE);
 
-    [Test]
-    public async Task GetMember_Valid_ReturnMembers()
+    var members = okResult.Value as IReadOnlyList<Member>;
+    Assert.That(members, Is.Not.Null);
+    Assert.Multiple(() =>
     {
-      // Arrange
-      Member expectedMember = GetTestMember();
+      Assert.That(members, Has.Count.EqualTo(1));
+    });
+  }
 
-      _mockMembersRepository.GetMemberAsync(expectedMember.Id).Returns(expectedMember);
+  [Test]
+  public async Task GetMember_Valid_ReturnMembers()
+  {
+    // Arrange
+    Member expectedMember = GetTestMember();
 
-      // Act
-      var memberResult = await _membersController.GetMember(expectedMember.Id);
-      var member = memberResult.Value;
+    _mockMembersRepository.GetMemberAsync(expectedMember.Id).Returns(expectedMember);
 
-      // Assert
-      Assert.That(member, Is.Not.Null);
-      Assert.Multiple(() =>
-      {
-        Assert.That(member.Id, Is.EqualTo(expectedMember.Id));
-        Assert.That(member.Birthday, Is.EqualTo(DateOnly.Parse("2000-01-01")));
-        Assert.That(member.City, Is.EqualTo("City"));
-      });
-    }
+    // Act
+    var memberResult = await _membersController.GetMember(expectedMember.Id);
+    var member = memberResult.Value;
 
-    [Test]
-    public async Task GetMember_Valid_ReturnNotFound()
+    // Assert
+    Assert.That(member, Is.Not.Null);
+    Assert.Multiple(() =>
     {
-      // Arrange
-      Member expectedMember = GetTestMember();
+      Assert.That(member.Id, Is.EqualTo(expectedMember.Id));
+      Assert.That(member.Birthday, Is.EqualTo(DateOnly.Parse("2000-01-01")));
+      Assert.That(member.City, Is.EqualTo("City"));
+    });
+  }
 
-      _mockMembersRepository.GetMemberAsync(expectedMember.Id).ReturnsNull();
+  [Test]
+  public async Task GetMember_Valid_ReturnNotFound()
+  {
+    // Arrange
+    Member expectedMember = GetTestMember();
 
-      // Act & Assert
-      var membersResult = await _membersController.GetMember(expectedMember.Id);
-      var notFoundResult = membersResult.Result as NotFoundResult;
-      Assert.That(notFoundResult, Is.Not.Null, NOT_FOUND_ERROR_MESSAGE);
-      Assert.That(notFoundResult.StatusCode, Is.EqualTo(NOT_FOUND), NOT_FOUND_ERROR_MESSAGE);
+    _mockMembersRepository.GetMemberAsync(expectedMember.Id).ReturnsNull();
 
-      var member = membersResult.Value;
-      Assert.That(member, Is.Null);
-    }
+    // Act & Assert
+    var membersResult = await _membersController.GetMember(expectedMember.Id);
+    var notFoundResult = membersResult.Result as NotFoundResult;
+    Assert.That(notFoundResult, Is.Not.Null, NOT_FOUND_ERROR_MESSAGE);
+    Assert.That(notFoundResult.StatusCode, Is.EqualTo(NOT_FOUND), NOT_FOUND_ERROR_MESSAGE);
 
-    [Test]
-    public async Task GetPhotos_Valid_ReturnPhotos()
+    var member = membersResult.Value;
+    Assert.That(member, Is.Null);
+  }
+
+  [Test]
+  public async Task GetPhotos_Valid_ReturnPhotos()
+  {
+    // Arrange
+    var expectedMember = GetTestMember();
+    IReadOnlyList<Photo> expectedPhotos = [GetTestPhoto()];
+
+    _mockMembersRepository.GetPhotosAsync(expectedMember.Id).Returns(expectedPhotos);
+
+    // Act & Assert
+    var photosResult = await _membersController.GetPhotos(expectedMember.Id);
+    var okResult = photosResult.Result as OkObjectResult;
+    Assert.That(okResult, Is.Not.Null, OK_ERROR_MESSAGE);
+
+    var photos = okResult.Value as IReadOnlyList<Photo>;
+    Assert.That(photos, Is.Not.Null);
+    Assert.Multiple(() =>
     {
-      // Arrange
-      var expectedMember = GetTestMember();
-      IReadOnlyList<Photo> expectedPhotos = [GetTestPhoto()];
-
-      _mockMembersRepository.GetPhotosAsync(expectedMember.Id).Returns(expectedPhotos);
-
-      // Act & Assert
-      var photosResult = await _membersController.GetPhotos(expectedMember.Id);
-      var okResult = photosResult.Result as OkObjectResult;
-      Assert.That(okResult, Is.Not.Null, OK_ERROR_MESSAGE);
-
-      var photos = okResult.Value as IReadOnlyList<Photo>;
-      Assert.That(photos, Is.Not.Null);
-      Assert.Multiple(() =>
-      {
-        Assert.That(photos, Has.Count.EqualTo(1));
-      });
-    }
+      Assert.That(photos, Has.Count.EqualTo(1));
+    });
   }
 }

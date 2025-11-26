@@ -17,7 +17,7 @@ namespace API.UnitTest
 
       AppDbContext = new AppDbContext(optionsBuilder);
       await AppDbContext.Database.MigrateAsync();
-
+      await Seed.SeedUsers(AppDbContext);
     }
 
     [OneTimeTearDown]
