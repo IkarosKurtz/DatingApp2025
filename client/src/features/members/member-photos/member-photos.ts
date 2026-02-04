@@ -27,8 +27,8 @@ export class MemberPhotos {
   }
 
   public getPhotoMock(): Pick<Photo, "url">[] {
-    return Array.from({ length: 20 }, (_, i) => ({
-      url: "./user.jpg",
+    return Array.from({ length: 1 }, (_, i) => ({
+      url: "./user.png",
     }));
   }
 }
