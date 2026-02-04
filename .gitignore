@@ -136,3 +136,5 @@ _NCrunch*
 **/TestResults
 *.db
 *.db*
+*.md
+!*/README.md
