@@ -1,6 +1,7 @@
 import { DatePipe } from "@angular/common";
 import { Component, inject, OnInit, signal } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { MembersService } from "../../../core/services/members-service";
 import { Member } from "../../../types/member";
 
 @Component({
@@ -12,6 +13,7 @@ import { Member } from "../../../types/member";
 export class MemberProfile implements OnInit {
   private readonly route = inject(ActivatedRoute);
   protected member = signal<Member | undefined>(undefined);
+  protected membersService = inject(MembersService);
 
   public ngOnInit(): void {
     this.route.parent?.data.subscribe({

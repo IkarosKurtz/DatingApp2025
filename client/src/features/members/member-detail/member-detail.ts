@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from "@angular/core";
+import { Component, computed, inject, OnInit, signal } from "@angular/core";
 import {
   ActivatedRoute,
   NavigationEnd,
@@ -9,6 +9,8 @@ import {
 } from "@angular/router";
 import { filter } from "rxjs";
 import { AgePipe } from "../../../core/pipes/age-pipe";
+import { AccountService } from "../../../core/services/account-service";
+import { MembersService } from "../../../core/services/members-service";
 import { Member } from "../../../types/member";
 
 @Component({
@@ -20,8 +22,16 @@ import { Member } from "../../../types/member";
 export class MemberDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly accountService = inject(AccountService);
+  protected readonly membersService = inject(MembersService);
   protected member = signal<Member | undefined>(undefined);
   protected title = signal<string | undefined>("Profile");
+  protected isCurrentUser = computed(() => {
+    return (
+      this.accountService.currentUser()?.id ===
+      this.route.snapshot.paramMap.get("id")
+    );
+  });
 
   public ngOnInit() {
     this.route.data.subscribe({
