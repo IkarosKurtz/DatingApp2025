@@ -17,6 +17,11 @@ namespace API.Repositories
       return await context.Members.ToListAsync();
     }
 
+    public async Task<Member?> GetMemberForUpdate(string memberId)
+    {
+      return await context.Members.Include(m => m.User).SingleOrDefaultAsync(m => m.Id == memberId);
+    }
+
     public async Task<IReadOnlyList<Photo>> GetPhotosAsync(string memberId)
     {
       return await context.Members
