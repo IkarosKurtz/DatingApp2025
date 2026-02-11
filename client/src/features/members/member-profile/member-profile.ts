@@ -69,10 +69,12 @@ export class MemberProfile implements OnInit, OnDestroy {
       ...this.editableMember,
     };
 
-    console.group("Updated Member");
-    console.log(updatedMember);
-    console.groupEnd();
-    this.toast.success("Profile updated successfully");
-    this.membersService.editMode.set(false);
+    this.membersService.updateMember(this.editableMember).subscribe({
+      next: () => {
+        this.toast.success("Profile updated successfully");
+        this.membersService.editMode.set(false);
+        this.memberProfileEditForm?.reset(updatedMember);
+      },
+    });
   }
 }

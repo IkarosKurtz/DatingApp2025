@@ -37,7 +37,7 @@ public class MembersController(IMembersRepository membersRepository) : BaseApiCo
   public async Task<ActionResult> UpdateMember(MemberUpdateRequest request)
   {
     var memberId = User.GetMemberId();
-    var member = await membersRepository.GetMemberForUpdate(memberId);
+    var member = await membersRepository.GetMemberForUpdateAsync(memberId);
     if (member == null) return BadRequest("Failed to get member");
 
     member.DisplayName = request.DisplayName ?? member.DisplayName;
