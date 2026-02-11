@@ -17,3 +17,8 @@ export interface Photo {
   publicId?: string;
   memberId: string;
 }
+
+export type EditableMember = Pick<
+  Member,
+  "displayName" | "description" | "city" | "country"
+>;

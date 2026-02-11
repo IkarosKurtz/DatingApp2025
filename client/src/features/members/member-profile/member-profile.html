@@ -12,7 +12,56 @@
     About {{member.displayName}}
   </h3>
   @if (membersService.editMode()) {
-  <div>El perfil va aqui</div>
+  <form
+    #memberProfileEditForm="ngForm"
+    (ngSubmit)="updateProfile()"
+    class="flex flex-col w-full gap-4"
+  >
+    <label class="floating-label">
+      <span>Display Name</span>
+      <input
+        type="text"
+        name="displayName"
+        [(ngModel)]="editableMember.displayName"
+        placeholder="Display Name"
+      />
+    </label>
+    <label class="floating-label">
+      <span>Description</span>
+      <input
+        type="text"
+        name="description"
+        [(ngModel)]="editableMember.description"
+        placeholder="Description"
+      />
+    </label>
+    <label class="floating-label">
+      <span>City</span>
+      <input
+        type="text"
+        name="city"
+        [(ngModel)]="editableMember.city"
+        placeholder="City"
+      />
+    </label>
+    <label class="floating-label">
+      <span>Country</span>
+      <input
+        type="text"
+        name="country"
+        [(ngModel)]="editableMember.country"
+        placeholder="Country"
+      />
+    </label>
+    <div class="flex self-end">
+      <button
+        type="submit"
+        class="btn btn-success"
+      >
+        Update Profile
+      </button>
+    </div>
+  </form>
   } @else {
   <div>{{member.description}}</div>
   }
