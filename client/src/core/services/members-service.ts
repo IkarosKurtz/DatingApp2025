@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable, signal } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, tap } from "rxjs";
 import { environment } from "../../environments/environment";
 import { EditableMember, Member, Photo } from "../../types/member";
 
@@ -10,14 +10,19 @@ import { EditableMember, Member, Photo } from "../../types/member";
 export class MembersService {
   private readonly http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
-  editMode = signal<boolean>(false);
+  public editMode = signal<boolean>(false);
+  public member = signal<Member | null>(null);
 
   public toggleEditMode(): void {
     this.editMode.set(!this.editMode());
   }
 
   public getMember(id: string): Observable<Member> {
-    return this.http.get<Member>(this.baseUrl + "members/" + id);
+    return this.http.get<Member>(this.baseUrl + "members/" + id).pipe(
+      tap((member) => {
+        this.member.set(member);
+      }),
+    );
   }
 
   public getMembers(): Observable<Member[]> {

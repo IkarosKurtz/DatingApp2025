@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { FormsModule, NgForm } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { AccountService } from "../../../core/services/account-service";
 import { MembersService } from "../../../core/services/members-service";
 import { ToastService } from "../../../core/services/toast-service";
 import { EditableMember, Member } from "../../../types/member";
@@ -29,7 +29,7 @@ export class MemberProfile implements OnInit, OnDestroy {
       $event.preventDefault();
     }
   }
-  private readonly route = inject(ActivatedRoute);
+  private readonly accountService = inject(AccountService);
   private readonly toast = inject(ToastService);
   protected member = signal<Member | undefined>(undefined);
   protected membersService = inject(MembersService);
@@ -41,17 +41,11 @@ export class MemberProfile implements OnInit, OnDestroy {
   };
 
   public ngOnInit(): void {
-    this.route.parent?.data.subscribe({
-      next: (data) => {
-        this.member.set(data["member"]);
-      },
-    });
-
     this.editableMember = {
-      displayName: this.member()?.displayName ?? "",
-      description: this.member()?.description ?? "",
-      city: this.member()?.city ?? "",
-      country: this.member()?.country ?? "",
+      displayName: this.membersService.member()?.displayName ?? "",
+      description: this.membersService.member()?.description ?? "",
+      city: this.membersService.member()?.city ?? "",
+      country: this.membersService.member()?.country ?? "",
     };
   }
 
@@ -62,18 +56,27 @@ export class MemberProfile implements OnInit, OnDestroy {
   }
 
   public updateProfile(): void {
-    if (!this.member()) return;
+    if (!this.membersService.member()) return;
 
     const updatedMember = {
-      ...this.member(),
+      ...this.membersService.member()!,
       ...this.editableMember,
     };
 
     this.membersService.updateMember(this.editableMember).subscribe({
       next: () => {
-        this.toast.success("Profile updated successfully");
+        const currentUser = this.accountService.currentUser();
+        if (
+          currentUser &&
+          updatedMember.displayName !== currentUser?.displayName
+        ) {
+          currentUser.displayName = updatedMember.displayName;
+          this.accountService.setCurrentUser(currentUser);
+        }
         this.membersService.editMode.set(false);
+        this.membersService.member.set(updatedMember as Member);
         this.memberProfileEditForm?.reset(updatedMember);
+        this.toast.success("Profile updated successfully");
       },
     });
   }
