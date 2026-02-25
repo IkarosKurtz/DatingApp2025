@@ -1,0 +1,17 @@
+import { Component, input, output } from "@angular/core";
+
+@Component({
+  selector: "app-delete-button",
+  imports: [],
+  templateUrl: "./delete-button.html",
+  styleUrl: "./delete-button.css",
+})
+export class DeleteButton {
+  public disabled = input<boolean>();
+  public selected = input<boolean>();
+  public clickEvent = output<Event>();
+
+  public onClick(event: Event) {
+    this.clickEvent.emit(event);
+  }
+}
