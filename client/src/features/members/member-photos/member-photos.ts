@@ -2,13 +2,14 @@ import { Component, inject, OnInit, signal } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { AccountService } from "../../../core/services/account-service";
 import { MembersService } from "../../../core/services/members-service";
+import { IconButton } from "../../../shared/icon-button/icon-button";
 import { ImageUpload } from "../../../shared/image-upload/image-upload";
 import { Member, Photo } from "../../../types/member";
 import { User } from "../../../types/user";
 
 @Component({
   selector: "app-member-photos",
-  imports: [ImageUpload],
+  imports: [ImageUpload, IconButton],
   templateUrl: "./member-photos.html",
   styleUrl: "./member-photos.css",
 })
