@@ -11,8 +11,8 @@ import { MemberProfile } from "../features/members/member-profile/member-profile
 import { memberResolver } from "../features/members/member-resolver";
 import { Messages } from "../features/messages/messages";
 import { NotFound } from "../features/not-found/not-found";
-import { ServerError } from "../features/server-error/server-error";
 import { TestErrors } from "../features/test-errors/test-errors";
+import { ServerError } from "../shared/server-error/server-error";
 
 export const routes: Routes = [
   { path: "", component: Home },
