@@ -13,7 +13,7 @@ post {
 body:json {
   {
     "email": "arenita@test.com",
-    "password": "Pa$$w0rd"
+    "password": "password"
   }
 }
 
@@ -23,7 +23,7 @@ tests {
   });
   
   const data = res.body;
-  bru.setEnvVar('arenitaToken', data.token);
+  bru.setEnvVar('token', data.token);
 }
 
 settings {
