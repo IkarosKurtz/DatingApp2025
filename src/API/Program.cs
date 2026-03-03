@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json.Serialization;
 using API.Data;
+using API.Helpers;
 using API.Interfaces;
 using API.Middlewares;
 using API.Repositories;
@@ -63,7 +64,7 @@ public static class Program
     {
       app.UseCors(opt =>
       {
-        opt.AllowAnyHeader().AllowAnyOrigin()
+        opt.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()
           .WithOrigins(
             "http://localhost:4200",
             "https://localhost:4200"
@@ -91,6 +92,8 @@ public static class Program
   {
     builder.Services.AddScoped<ITokenService, TokenService>();
     builder.Services.AddScoped<IMembersRepository, MembersRepository>();
+    builder.Services.AddScoped<IPhotoService, PhotoService>();
+    builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
   }
 
   private static void AddServiceDefaults(WebApplicationBuilder builder)
@@ -110,21 +113,3 @@ public static class Program
 
   }
 }
-
-
-
-
-
-
-
-// No lo queremos por ahora o quizas nunca
-/* // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-*/
-

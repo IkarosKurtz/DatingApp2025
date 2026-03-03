@@ -1,3 +1,8 @@
 {
-  "conventionalCommits.scopes": ["parcial01", "parcial02", "parcial03"]
+  "conventionalCommits.scopes": [
+    "parcial01",
+    "parcial02",
+    "parcial03",
+    "parcial04"
+  ]
 }
