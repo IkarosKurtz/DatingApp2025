@@ -40,7 +40,7 @@ export class MembersService {
   public uploadPhoto(file: File): Observable<Photo> {
     const formData = new FormData();
     formData.append("file", file);
-    return this.http.post<Photo>(this.baseUrl + "photos", formData);
+    return this.http.post<Photo>(this.baseUrl + "members/photo", formData);
   }
 
   public setMainPhoto(photo: Photo) {
