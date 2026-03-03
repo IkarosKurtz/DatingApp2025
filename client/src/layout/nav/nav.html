@@ -20,13 +20,12 @@
       </svg>
       <h3 class="text-xl font-semibold uppercase">Dating App</h3>
     </a>
-
     <nav class="flex gap-3 my-2 uppercase text-lg text-white">
       @if (accountService.currentUser()) {
       <a
         routerLink="/members"
         routerLinkActive="text-accent"
-        [routerLinkActiveOptions]="{exact: true}"
+        [routerLinkActiveOptions]="{ exact: true }"
         >Matches</a
       >
       <a
@@ -47,7 +46,7 @@
       >
     </nav>
 
-    @if (busyService.busyRequestCount()) {
+    @if (busyService.busyRequestCount() > 0) {
     <span class="loading loading-spinner text-accent"></span>
     }
 
@@ -75,7 +74,7 @@
         </button>
         <ul
           tabindex="-1"
-          class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+          class="dropdown-content z-50 menu bg-base-100 rounded-box w-52 p-2 shadow-sm"
         >
           @for (theme of themes; track $index) {
           <li (click)="handleSelectedTheme(theme)">
@@ -93,11 +92,11 @@
           class="flex items-center text-white text-xl gap-3 cursor-pointer"
         >
           <img
-            [src]="user.imageUrl || 'assets/user.jpg'"
+            [src]="user?.imageUrl || './user.jpg'"
             alt="user avatar"
             class="w-8 h-8 rounded-full"
           />
-          <span>{{ user.displayName }}</span>
+          <span>{{user.displayName}}</span>
         </div>
         <ul
           tabindex="0"
@@ -121,7 +120,6 @@
           class="input"
           placeholder="Email"
         />
-
         <input
           [(ngModel)]="creds.password"
           name="password"
@@ -129,7 +127,6 @@
           class="input"
           placeholder="Password"
         />
-
         <button
           type="submit"
           class="btn"
