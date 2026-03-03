@@ -9,5 +9,6 @@ namespace API.Repositories.Interfaces
     Task<IReadOnlyList<Member>> GetMembersAsync();
     Task<Member?> GetMemberAsync(string memberId);
     Task<IReadOnlyList<Photo>> GetPhotosAsync(string memberId);
+    Task<Member?> GetMemberForUpdateAsync(string memberId);
   }
 }

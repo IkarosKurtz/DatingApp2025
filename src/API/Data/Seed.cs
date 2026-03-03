@@ -33,6 +33,7 @@ namespace API.Data
           DisplayName = user.DisplayName,
           PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("password")),
           PasswordSalt = hmac.Key,
+          ImageUrl = user.ImageUrl,
           Member = new Member
           {
             Id = user.Id,

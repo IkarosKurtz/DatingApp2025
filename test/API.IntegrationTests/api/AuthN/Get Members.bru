@@ -1,0 +1,24 @@
+meta {
+  name: Get Members
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/members
+  body: none
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFyZW5pdGFAdGVzdC5jb20iLCJuYW1laWQiOiJhcmVuaXRhLWlkIiwibmJmIjoxNzcxNTA3OTkzLCJleHAiOjE3NzIxMTI3OTMsImlhdCI6MTc3MTUwNzk5M30.r74lnvwFguzeeMgN-PgyCUIqGXrh0Oe-gqHEF5QAcuicx1ZRZ8306N6AgvyOrTn1x_qjI_I6cnELN9HSkc_TrQ
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFyZW5pdGFAdGVzdC5jb20iLCJuYW1laWQiOiJhcmVuaXRhLWlkIiwibmJmIjoxNzcxNTA4MjQ0LCJleHAiOjE3NzIxMTMwNDQsImlhdCI6MTc3MTUwODI0NH0.6wqyJW0xEPntoag9uFsQsCBphs6ipVehTVX669i5_8govYS-8RzBU1dT7jVKmOGPBeJtGeqbKWeGFe1uQt9sVA
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

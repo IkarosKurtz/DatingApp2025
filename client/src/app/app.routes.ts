@@ -1,5 +1,6 @@
 import { Routes } from "@angular/router";
-import { authGuard } from "../core/guard/auth-guard";
+import { authGuard } from "../core/guards/auth-guard";
+import { preventUnsavedChangesGuard } from "../core/guards/prevent-unsaved-changes-guard";
 import { Home } from "../features/home/home";
 import { Lists } from "../features/lists/lists";
 import { MemberDetail } from "../features/members/member-detail/member-detail";
@@ -10,8 +11,8 @@ import { MemberProfile } from "../features/members/member-profile/member-profile
 import { memberResolver } from "../features/members/member-resolver";
 import { Messages } from "../features/messages/messages";
 import { NotFound } from "../features/not-found/not-found";
-import { ServerError } from "../features/server-error/server-error";
 import { TestErrors } from "../features/test-errors/test-errors";
+import { ServerError } from "../shared/server-error/server-error";
 
 export const routes: Routes = [
   { path: "", component: Home },
@@ -28,7 +29,12 @@ export const routes: Routes = [
         component: MemberDetail,
         children: [
           { path: "", redirectTo: "profile", pathMatch: "full" },
-          { path: "profile", component: MemberProfile, title: "Profile" },
+          {
+            path: "profile",
+            component: MemberProfile,
+            title: "Profile",
+            canDeactivate: [preventUnsavedChangesGuard],
+          },
           { path: "photos", component: MemberPhotos, title: "Photos" },
           { path: "messages", component: MemberMessages, title: "Messages" },
         ],
