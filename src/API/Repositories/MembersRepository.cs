@@ -46,5 +46,19 @@ namespace API.Repositories
 
       return await Pagination.CreateAsync(query, paginationRequest.PageNumber, paginationRequest.PageSize);
     }
+
+    public async Task<PaginationResult<Member>> GetMembersAsync(MemberRequest request)
+    {
+      var query = context.Members.AsQueryable();
+
+      query = query.Where(x => x.Id != request.CurrentMemberId);
+
+      if (string.IsNullOrEmpty(request.Gender))
+      {
+        query = query.Where(x => x.Gender == request.Gender);
+      }
+
+      return await Pagination.CreateAsync(query, request.PageNumber, request.PageSize);
+    }
   }
 }
