@@ -9,6 +9,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { FormsModule, NgForm } from "@angular/forms";
+import { TimeAgoPipe } from "../../../core/pipes/time-ago-pipe";
 import { AccountService } from "../../../core/services/account-service";
 import { MembersService } from "../../../core/services/members-service";
 import { ToastService } from "../../../core/services/toast-service";
@@ -16,7 +17,7 @@ import { EditableMember, Member } from "../../../types/member";
 
 @Component({
   selector: "app-member-profile",
-  imports: [DatePipe, FormsModule],
+  imports: [DatePipe, FormsModule, TimeAgoPipe],
   templateUrl: "./member-profile.html",
   styleUrl: "./member-profile.css",
 })
