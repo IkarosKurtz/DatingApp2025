@@ -1,5 +1,6 @@
 using API.Data;
 using API.Entities;
+using API.Helpers;
 using API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,6 +38,13 @@ namespace API.Repositories
     public void Update(Member member)
     {
       context.Entry(member).State = EntityState.Modified;
+    }
+
+    public async Task<PaginationResult<Member>> GetMembersAsync(PaginationRequest paginationRequest)
+    {
+      var query = context.Members.AsQueryable();
+
+      return await Pagination.CreateAsync(query, paginationRequest.PageNumber, paginationRequest.PageSize);
     }
   }
 }
