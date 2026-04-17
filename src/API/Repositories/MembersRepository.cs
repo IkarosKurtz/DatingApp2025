@@ -58,6 +58,10 @@ namespace API.Repositories
         query = query.Where(x => x.Gender == request.Gender);
       }
 
+      var minAgeDate = DateOnly.FromDateTime(DateTime.Today.AddYears(-request.MaxAge - 1));
+      var maxAgeDate = DateOnly.FromDateTime(DateTime.Today.AddYears(-request.MinAge));
+      query = query.Where(x => x.Birthday >= minAgeDate && x.Birthday <= maxAgeDate);
+
       return await Pagination.CreateAsync(query, request.PageNumber, request.PageSize);
     }
   }
