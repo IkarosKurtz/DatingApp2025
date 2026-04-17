@@ -29,4 +29,5 @@ export class MemberParams {
   maxAge = 120;
   pageNumber = 1;
   pageSize = 10;
+  orderBy = 'age';
 }
