@@ -62,6 +62,13 @@ namespace API.Repositories
       var maxAgeDate = DateOnly.FromDateTime(DateTime.Today.AddYears(-request.MinAge));
       query = query.Where(x => x.Birthday >= minAgeDate && x.Birthday <= maxAgeDate);
 
+      query = request.OrderBy switch
+      {
+        "created" => query.OrderByDescending(x => x.Created),
+        "lastActive" => query.OrderByDescending(x => x.LastActive),
+        _ => query.OrderByDescending(x => x.Birthday)
+      };
+
       return await Pagination.CreateAsync(query, request.PageNumber, request.PageSize);
     }
   }
