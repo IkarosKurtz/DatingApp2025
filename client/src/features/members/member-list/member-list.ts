@@ -1,8 +1,9 @@
-import { Component, inject, OnInit, signal } from "@angular/core";
+import { Component, inject, OnInit, signal, ViewChild } from "@angular/core";
 import { MembersService } from "../../../core/services/members-service";
 import { Paginator } from "../../../shared/paginator/paginator";
 import { Member, MemberParams } from "../../../types/member";
 import { PaginationResult } from "../../../types/paginationMetadata";
+import { FilterModal } from "../filter-modal/filter-modal";
 import { MemberCard } from "../member-card/member-card";
 
 @Component({
@@ -12,6 +13,7 @@ import { MemberCard } from "../member-card/member-card";
   styleUrl: "./member-list.css",
 })
 export class MemberList implements OnInit {
+  @ViewChild("filterModal") modal!: FilterModal;
   private readonly membersService = inject(MembersService);
   protected paginatedMembers = signal<PaginationResult<Member> | null>(null);
   protected memberParams = new MemberParams();
@@ -32,5 +34,13 @@ export class MemberList implements OnInit {
     this.memberParams.pageNumber = event.pageNumber;
     this.memberParams.pageSize = event.pageSize;
     this.loadMembers();
+  }
+
+  openModal() {
+    this.modal.open();
+  }
+
+  onClose() {
+    console.log("Modal closed");
   }
 }
