@@ -88,6 +88,22 @@ public static class Program
     });
   }
 
+  private static void AddServiceDefaults(WebApplicationBuilder builder)
+  {
+    builder.Services.AddCors();
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+    {
+      var tokenKey = builder.Configuration["TokenKey"] ?? throw new ArgumentNullException("TokenKey not found in configuration.");
+      options.TokenValidationParameters = new TokenValidationParameters
+      {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
+        ValidateIssuer = false,
+        ValidateAudience = false
+      };
+    });
+  }
+
   private static void AddScopedServices(WebApplicationBuilder builder)
   {
     builder.Services.AddScoped<ITokenService, TokenService>();
