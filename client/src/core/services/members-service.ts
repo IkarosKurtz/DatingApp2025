@@ -1,8 +1,9 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { inject, Injectable, signal } from "@angular/core";
 import { Observable, tap } from "rxjs";
 import { environment } from "../../environments/environment";
 import { EditableMember, Member, Photo } from "../../types/member";
+import { PaginationResult } from "../../types/paginationMetadata";
 
 @Injectable({
   providedIn: "root",
@@ -25,8 +26,17 @@ export class MembersService {
     );
   }
 
-  public getMembers(): Observable<Member[]> {
-    return this.http.get<Member[]>(this.baseUrl + "members");
+  public getMembers(
+    pageNumber = 1,
+    pageSize = 5,
+  ): Observable<PaginationResult<Member>> {
+    let params = new HttpParams();
+    params = params.append("pageNumber", pageNumber);
+    params = params.append("pageSize", pageSize);
+
+    return this.http.get<PaginationResult<Member>>(this.baseUrl + "members", {
+      params,
+    });
   }
 
   public getPhotos(id: string): Observable<Photo[]> {

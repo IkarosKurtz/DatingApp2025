@@ -3,7 +3,8 @@ import { Component, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { MembersService } from "../../../core/services/members-service";
 import { Member } from "../../../types/member";
-import { MemberCard } from "../../members/member-card/member-card";
+import { PaginationResult } from "../../../types/paginationMetadata";
+import { MemberCard } from "../member-card/member-card";
 
 @Component({
   selector: "app-member-list",
@@ -13,9 +14,9 @@ import { MemberCard } from "../../members/member-card/member-card";
 })
 export class MemberList {
   private readonly membersService = inject(MembersService);
-  protected members$: Observable<Member[]>;
+  protected paginatedMembers$: Observable<PaginationResult<Member>>;
 
   constructor() {
-    this.members$ = this.membersService.getMembers();
+    this.paginatedMembers$ = this.membersService.getMembers();
   }
 }
