@@ -1,4 +1,3 @@
-import { JsonPipe } from "@angular/common";
 import { Component, inject, output, signal } from "@angular/core";
 import {
   AbstractControl,
@@ -16,7 +15,7 @@ import { RegisterCreds } from "../../../types/user";
 
 @Component({
   selector: "app-register",
-  imports: [ReactiveFormsModule, JsonPipe, TextInput],
+  imports: [ReactiveFormsModule, TextInput],
   templateUrl: "./register.html",
   styleUrl: "./register.css",
 })
