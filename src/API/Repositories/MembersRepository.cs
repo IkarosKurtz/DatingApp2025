@@ -53,7 +53,7 @@ namespace API.Repositories
 
       query = query.Where(x => x.Id != request.CurrentMemberId);
 
-      if (string.IsNullOrEmpty(request.Gender))
+      if (!string.IsNullOrEmpty(request.Gender))
       {
         query = query.Where(x => x.Gender == request.Gender);
       }
