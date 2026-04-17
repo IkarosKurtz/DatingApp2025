@@ -22,3 +22,11 @@ export type EditableMember = Pick<
   Member,
   "displayName" | "description" | "city" | "country"
 >;
+
+export class MemberParams {
+  gender?: string;
+  minAge = 18;
+  maxAge = 120;
+  pageNumber = 1;
+  pageSize = 10;
+}
