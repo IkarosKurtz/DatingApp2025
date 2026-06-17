@@ -1,12 +1,12 @@
-import { Component, effect, ElementRef, inject, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
-import { MessagesService } from '../../core/services/messages-service';
-import { MembersService } from '../../core/services/members-service';
-import { Message } from '../../types/message';
-import { DatePipe } from '@angular/common';
-import { TimeAgoPipe } from '../../core/pipes/time-ago-pipe';
-import { FormsModule } from '@angular/forms';
-import { PresenceService } from '../../core/services/presence-service';
-import { ActivatedRoute } from '@angular/router';
+import { DatePipe } from '@angular/common'
+import { Component, effect, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core'
+
+import { FormsModule } from '@angular/forms'
+import { ActivatedRoute } from '@angular/router'
+import { TimeAgoPipe } from '../../../core/pipes/time-ago-pipe'
+import { MembersService } from '../../../core/services/members-service'
+import { MessagesService } from '../../../core/services/messages-service'
+import { PresenceService } from '../../../core/services/presence-service'
 
 @Component({
   selector: 'app-member-messages',
