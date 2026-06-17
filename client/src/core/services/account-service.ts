@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http"
-import { inject, Injectable, signal, WritableSignal } from "@angular/core"
+import { inject, Injectable, signal } from "@angular/core"
 import { Observable, tap } from "rxjs"
 import { environment } from "../../environments/environment"
 import { LoginCreds, RegisterCreds, User } from "../../types/user"
@@ -11,36 +11,55 @@ import { LikesService } from "./likes-service"
 export class AccountService {
   private http = inject(HttpClient);
   private likesService = inject(LikesService);
-  public baseURL = environment.apiUrl;
-  public currentUser: WritableSignal<User | null> = signal(null);
+  currentUser = signal<User | null>(null);
+  baseUrl = environment.apiUrl;
 
-  public login(creds: LoginCreds): Observable<User> {
-    return this.http.post<User>(this.baseURL + "account/login", creds).pipe(
-      tap((response) => {
-        if (!response) return;
-        this.setCurrentUser(response);
-      }),
+  register(creds: RegisterCreds): Observable<User> {
+    return this.http.post<User>(this.baseUrl + "account/register", creds, { withCredentials: true }).pipe(
+      tap(user => {
+        if (user) {
+          this.setCurrentUser(user);
+          this.startTokenRefreshInterval();
+        }
+      })
     );
+  }
+
+  login(creds: LoginCreds): Observable<User> {
+    return this.http.post<User>(this.baseUrl + "account/login", creds, { withCredentials: true }).pipe(
+      tap(user => {
+        if (user) {
+          this.setCurrentUser(user);
+          this.startTokenRefreshInterval();
+        }
+      })
+    );
+  }
+
+  refreshToken() {
+    return this.http.post<User>(this.baseUrl + 'account/token', {}, { withCredentials: true });
+  }
+
+  startTokenRefreshInterval() {
+    setInterval(() => {
+      this.http.post<User>(this.baseUrl + 'account/token', {}, { withCredentials: true }).subscribe({
+        next: user => {
+          this.setCurrentUser(user);
+        },
+        error: () => {
+          this.logout();
+        }
+      })
+    }, 5 * 60 * 1000);
   }
 
   setCurrentUser(user: User) {
     user.roles = this.getRolesFromToken(user);
-    localStorage.setItem("user", JSON.stringify(user));
     this.currentUser.set(user);
     this.likesService.getLikeIds();
   }
 
-  public register(cred: RegisterCreds): Observable<User> {
-    return this.http.post<User>(this.baseURL + "account/register", cred).pipe(
-      tap((user) => {
-        if (!user) return;
-        this.setCurrentUser(user);
-      }),
-    );
-  }
-
-  public logout() {
-    localStorage.removeItem("user");
+  logout() {
     localStorage.removeItem("filters");
     this.likesService.clearLikeIds();
     this.currentUser.set(null);
