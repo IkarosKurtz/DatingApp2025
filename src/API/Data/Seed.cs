@@ -7,58 +7,73 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Data
+namespace API.Data;
+
+public class Seed
 {
-  public class Seed
+  public static async Task SeedUsers(UserManager<AppUser> userManager)
   {
-    public static async Task SeedUsers(AppDbContext context)
+    if (await userManager.Users.AnyAsync()) return;
+
+    var seedUsersData = await File.ReadAllTextAsync("Data/UserSeedData.json");
+    var seedUsers = JsonSerializer.Deserialize<List<SeedUserDto>>(seedUsersData);
+
+    if (seedUsers == null)
     {
-      if (await context.Users.AnyAsync()) return;
-
-      var seedUserData = await File.ReadAllTextAsync("Data/UserSeedData.json");
-      var users = JsonSerializer.Deserialize<List<SeedUserDto>>(seedUserData);
-
-      if (users == null) return;
-
-      using var hmac = new HMACSHA512();
-
-      foreach (var user in users)
-      {
-        var newUser = new AppUser
-        {
-          Id = user.Id,
-          Email = user.Email,
-          DisplayName = user.DisplayName,
-          PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("password")),
-          PasswordSalt = hmac.Key,
-          ImageUrl = user.ImageUrl,
-          Member = new Member
-          {
-            Id = user.Id,
-            DisplayName = user.DisplayName,
-            Gender = user.Gender,
-            City = user.City,
-            Country = user.Country,
-            Description = user.Description,
-            Birthday = user.Birthday,
-            ImageUrl = user.ImageUrl,
-            LastActive = user.LastActive,
-            Created = user.Created,
-          }
-        };
-
-        newUser.Member.Photos.Add(new Photo
-        {
-          Url = user.ImageUrl!,
-          MemberId = newUser.Id
-        });
-
-        context.Users.Add(newUser);
-      }
-
-      await context.SaveChangesAsync();
+      Console.WriteLine("No seed data available");
+      return;
     }
+
+    foreach (var seedUser in seedUsers)
+    {
+      var user = new AppUser
+      {
+        Id = seedUser.Id,
+        Email = seedUser.Email,
+        UserName = seedUser.Email,
+        DisplayName = seedUser.DisplayName,
+        ImageUrl = seedUser.ImageUrl,
+        Member = new Member
+        {
+          Id = seedUser.Id,
+          DisplayName = seedUser.DisplayName,
+          Gender = seedUser.Gender,
+          City = seedUser.City,
+          Country = seedUser.Country,
+          Description = seedUser.Description,
+          Birthday = seedUser.Birthday,
+          ImageUrl = seedUser.ImageUrl,
+          LastActive = seedUser.LastActive,
+          Created = seedUser.Created
+        }
+      };
+
+      user.Member.Photos.Add(new Photo
+      {
+        Url = seedUser.ImageUrl!,
+        MemberId = seedUser.Id
+      });
+
+      var result = await userManager.CreateAsync(user, "Pa$$w0rd");
+      if (!result.Succeeded)
+      {
+        Console.WriteLine(result.Errors.First().Description);
+      }
+      await userManager.AddToRoleAsync(user, "Member");
+    }
+
+    var admin = new AppUser
+    {
+      UserName = "admin@test.com",
+      Email = "admin@test.com",
+      DisplayName = "Admin"
+    };
+
+
+    await userManager.CreateAsync(admin, "Pa$$w0rd");
+    await userManager.AddToRolesAsync(admin, ["Admin", "Moderator"]);
   }
 }

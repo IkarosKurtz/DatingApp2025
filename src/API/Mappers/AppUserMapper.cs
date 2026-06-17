@@ -6,15 +6,15 @@ namespace API.Extensions;
 
 public static class AppUserMapper
 {
-  public static UserResponse ToDto(this AppUser user, ITokenService tokenService)
+  public static async Task<UserResponse> ToDto(this AppUser user, ITokenService tokenService)
   {
     return new UserResponse
     {
       Id = user.Id,
       DisplayName = user.DisplayName,
-      Email = user.Email,
-      Token = tokenService.CreateToken(user),
-      ImageUrl = user.ImageUrl
+      Email = user.Email!,
+      ImageUrl = user.ImageUrl,
+      Token = await tokenService.CreateToken(user)
     };
   }
 }

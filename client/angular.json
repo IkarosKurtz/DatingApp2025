@@ -6,14 +6,6 @@
     "client": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:pipe": {
-          "skipImport": false,
-          "path": "src/core/pipes"
-        },
-        "@schematics/angular:resolver": {
-          "path": "src",
-          "skipTests": false
-        },
         "@schematics/angular:component": {
           "skipTests": false,
           "path": "src"
@@ -27,8 +19,20 @@
           "path": "src/core/guards"
         },
         "@schematics/angular:interceptor": {
-          "path": "src/core/interceptors",
-          "skipTests": false
+          "skipTests": false,
+          "path": "src/core/interceptors"
+        },
+        "@schematics/angular:resolver": {
+          "skipTests": false,
+          "path": "src"
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": false,
+          "path": "src/core/pipes"
+        },
+        "@schematics/angular:directive": {
+          "skipTests": false,
+          "path": "src/shared/directives"
         }
       },
       "root": "",
