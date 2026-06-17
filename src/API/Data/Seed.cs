@@ -17,35 +17,37 @@ namespace API.Data
     {
       if (await context.Users.AnyAsync()) return;
 
-      var seedUserData = await File.ReadAllTextAsync("Data/UserSeedData.json");
-      var users = JsonSerializer.Deserialize<List<SeedUserDto>>(seedUserData);
+      var seedUsersData = await File.ReadAllTextAsync("Data/UserSeedData.json");
+      var seedUsers = JsonSerializer.Deserialize<List<SeedUserDto>>(seedUsersData);
 
-      if (users == null) return;
-
-      using var hmac = new HMACSHA512();
-
-      foreach (var user in users)
+      if (seedUsers == null)
       {
-        var newUser = new AppUser
+        Console.WriteLine("No seed data available");
+        return;
+      }
+
+      foreach (var seedUser in seedUsers)
+      {
+        using var hmac = new HMACSHA512();
+        var user = new AppUser
         {
-          Id = user.Id,
-          Email = user.Email,
-          DisplayName = user.DisplayName,
-          PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("password")),
-          PasswordSalt = hmac.Key,
-          ImageUrl = user.ImageUrl,
+          Id = seedUser.Id,
+          Email = seedUser.Email,
+          UserName = seedUser.Email,
+          DisplayName = seedUser.DisplayName,
+          ImageUrl = seedUser.ImageUrl,
           Member = new Member
           {
-            Id = user.Id,
-            DisplayName = user.DisplayName,
-            Gender = user.Gender,
-            City = user.City,
-            Country = user.Country,
-            Description = user.Description,
-            Birthday = user.Birthday,
-            ImageUrl = user.ImageUrl,
-            LastActive = user.LastActive,
-            Created = user.Created,
+            Id = seedUser.Id,
+            DisplayName = seedUser.DisplayName,
+            Gender = seedUser.Gender,
+            City = seedUser.City,
+            Country = seedUser.Country,
+            Description = seedUser.Description,
+            BirthDay = seedUser.BirthDay,
+            ImageUrl = seedUser.ImageUrl,
+            LastActive = seedUser.LastActive,
+            Created = seedUser.Created
           }
         };
 
