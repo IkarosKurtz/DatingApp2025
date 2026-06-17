@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using API.DTOs;
 using API.Entities;
+using API.Extensions;
 using API.Interfaces;
 using API.Mappers;
 using API.Repositories.Interfaces;
@@ -88,6 +88,6 @@ public class MessageHub(IMessagesRepository messagesRepository,
 
   private string GetUserId()
   {
-    return Context.User?.FindFirstValue(ClaimTypes.Email) ?? throw new HubException("Cannot get member id");
+    return Context.User?.GetMemberId() ?? throw new HubException("Cannot get member id");
   }
 }
