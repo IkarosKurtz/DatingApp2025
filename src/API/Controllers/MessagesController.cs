@@ -1,6 +1,7 @@
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using API.Mappers;
 using API.Repositories.Interfaces;
@@ -38,5 +39,14 @@ public class MessagesController(
     }
 
     return BadRequest("Failed to send the message");
+  }
+
+  [HttpGet]
+  public async Task<ActionResult<PaginationResult<MessageResponse>>> GetMessagesByContainer(
+      [FromBody] MessageParams messageParams)
+  {
+    messageParams.MemberId = User.GetMemberId();
+
+    return await messagesRepository.GetForMember(messageParams);
   }
 }
