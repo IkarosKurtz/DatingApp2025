@@ -46,20 +46,19 @@ public static class Program
 
     WebApplication app = builder.Build();
 
-    var scope = app.Services.CreateScope();
+    using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
-
     try
     {
       var context = services.GetRequiredService<AppDbContext>();
+      var userManager = services.GetRequiredService<UserManager<AppUser>>();
       context.Database.Migrate();
-      Task.Run(() => Seed.SeedUsers(context));
+      Task.Run(() => Seed.SeedUsers(userManager));
     }
     catch (Exception ex)
     {
       var logger = services.GetRequiredService<ILogger>();
-      logger.LogError(ex, "A migration or seeding error occurred.");
-      throw;
+      logger.LogError(ex, "Migration process failed!");
     }
 
     app.UseMiddleware<ExceptionMiddleware>();
