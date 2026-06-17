@@ -49,6 +49,7 @@ export class Messages implements OnInit {
   }
 
   onPageChange(event: { pageNumber: number, pageSize: number }) {
+
     this.pageNumber = event.pageNumber;
     this.pageSize = event.pageSize;
     this.loadMessages();
