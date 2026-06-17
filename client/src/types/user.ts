@@ -15,4 +15,8 @@ export interface RegisterCreds {
   email: string;
   displayName: string;
   password: string;
+  gender: string;
+  birthDay: string;
+  city: string;
+  country: string;
 }
