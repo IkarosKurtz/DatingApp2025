@@ -54,6 +54,7 @@ public static class Program
       var context = services.GetRequiredService<AppDbContext>();
       var userManager = services.GetRequiredService<UserManager<AppUser>>();
       context.Database.Migrate();
+      context.Connections.ExecuteDelete();
       Task.Run(() => Seed.SeedUsers(userManager));
     }
     catch (Exception ex)
