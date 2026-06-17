@@ -1,14 +1,15 @@
 import { Component, inject, OnInit, signal } from '@angular/core'
+import { RouterLink } from '@angular/router'
 import { MessagesService } from '../../core/services/messages-service'
-import { Paginator } from '../../shared/paginator/paginator'
+import { Paginator } from "../../shared/paginator/paginator"
 import { Message } from '../../types/message'
 import { PaginationResult } from '../../types/paginationMetadata'
 
 @Component({
-  selector: "app-messages",
-  imports: [Paginator],
-  templateUrl: "./messages.html",
-  styleUrl: "./messages.css",
+  selector: 'app-messages',
+  imports: [Paginator, RouterLink],
+  templateUrl: './messages.html',
+  styleUrl: './messages.css'
 })
 export class Messages implements OnInit {
   private messagesService = inject(MessagesService);
