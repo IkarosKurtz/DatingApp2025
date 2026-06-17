@@ -1,4 +1,6 @@
 using API.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -15,6 +17,13 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<AppUser>
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     base.OnModelCreating(modelBuilder);
+
+    modelBuilder.Entity<IdentityRole>()
+        .HasData(
+            new IdentityRole { Id = "member-id", Name = "Member", NormalizedName = "MEMBER" },
+            new IdentityRole { Id = "moderator-id", Name = "Moderator", NormalizedName = "MODERATOR" },
+            new IdentityRole { Id = "admin-id", Name = "Admin", NormalizedName = "ADMIN" }
+        );
 
     modelBuilder.Entity<MemberLike>()
         .HasKey(m => new { m.SourceMemberId, m.TargetMemberId });

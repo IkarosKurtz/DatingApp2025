@@ -44,20 +44,20 @@ namespace API.Data
             City = seedUser.City,
             Country = seedUser.Country,
             Description = seedUser.Description,
-            BirthDay = seedUser.BirthDay,
+            Birthday = seedUser.Birthday,
             ImageUrl = seedUser.ImageUrl,
             LastActive = seedUser.LastActive,
             Created = seedUser.Created
           }
         };
 
-        newUser.Member.Photos.Add(new Photo
+        user.Member.Photos.Add(new Photo
         {
-          Url = user.ImageUrl!,
-          MemberId = newUser.Id
+          Url = seedUser.ImageUrl!,
+          MemberId = seedUser.Id
         });
 
-        context.Users.Add(newUser);
+        context.Users.Add(user);
       }
 
       await context.SaveChangesAsync();

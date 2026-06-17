@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json.Serialization;
 using API.Data;
+using API.Entities;
 using API.Helpers;
 using API.Interfaces;
 using API.Middlewares;
@@ -9,6 +10,7 @@ using API.Repositories;
 using API.Repositories.Interfaces;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -40,6 +42,7 @@ public static class Program
 
     AddDbContext(builder);
     AddScopedServices(builder);
+    AddIdentity(builder);
 
     WebApplication app = builder.Build();
 
@@ -116,5 +119,16 @@ public static class Program
     // Other settings
     builder.Services.AddScoped<UserActivityLogger>();
     builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+  }
+
+  private static void AddIdentity(WebApplicationBuilder builder)
+  {
+    builder.Services.AddIdentityCore<AppUser>(opt =>
+    {
+      opt.Password.RequireNonAlphanumeric = false;
+      opt.User.RequireUniqueEmail = true;
+    })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>();
   }
 }
