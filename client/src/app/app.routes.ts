@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router'
+import { adminGuard } from '../core/guards/admin-guard'
 import { authGuard } from '../core/guards/auth-guard'
 import { preventUnsavedChangesGuard } from '../core/guards/prevent-unsaved-changes-guard'
 import { Admin } from '../features/admin/admin'
@@ -42,7 +43,7 @@ export const routes: Routes = [
       },
       { path: "lists", component: Lists },
       { path: "messages", component: Messages },
-      { path: "admin", component: Admin }
+      { path: "admin", component: Admin, canActivate: [adminGuard] }
     ]
   },
   { path: "server-error", component: ServerError },
