@@ -88,14 +88,6 @@ public static class Program
     });
   }
 
-  private static void AddScopedServices(WebApplicationBuilder builder)
-  {
-    builder.Services.AddScoped<ITokenService, TokenService>();
-    builder.Services.AddScoped<IMembersRepository, MembersRepository>();
-    builder.Services.AddScoped<IPhotoService, PhotoService>();
-    builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
-  }
-
   private static void AddServiceDefaults(WebApplicationBuilder builder)
   {
     builder.Services.AddCors();
@@ -110,6 +102,15 @@ public static class Program
         ValidateAudience = false
       };
     });
+  }
 
+  private static void AddScopedServices(WebApplicationBuilder builder)
+  {
+    builder.Services.AddScoped<ITokenService, TokenService>();
+    builder.Services.AddScoped<IMembersRepository, MembersRepository>();
+    builder.Services.AddScoped<IPhotoService, PhotoService>();
+    builder.Services.AddScoped<ILikesRepository, LikesRepository>();
+    builder.Services.AddScoped<UserActivityLogger>();
+    builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
   }
 }

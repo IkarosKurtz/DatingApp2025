@@ -1,5 +1,6 @@
 using API.Data;
 using API.Entities;
+using API.Helpers;
 using API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,6 +38,38 @@ namespace API.Repositories
     public void Update(Member member)
     {
       context.Entry(member).State = EntityState.Modified;
+    }
+
+    public async Task<PaginationResult<Member>> GetMembersAsync(PaginationRequest paginationRequest)
+    {
+      var query = context.Members.AsQueryable();
+
+      return await Pagination.CreateAsync(query, paginationRequest.PageNumber, paginationRequest.PageSize);
+    }
+
+    public async Task<PaginationResult<Member>> GetMembersAsync(MemberRequest request)
+    {
+      var query = context.Members.AsQueryable();
+
+      query = query.Where(x => x.Id != request.CurrentMemberId);
+
+      if (!string.IsNullOrEmpty(request.Gender))
+      {
+        query = query.Where(x => x.Gender == request.Gender);
+      }
+
+      var minAgeDate = DateOnly.FromDateTime(DateTime.Today.AddYears(-request.MaxAge - 1));
+      var maxAgeDate = DateOnly.FromDateTime(DateTime.Today.AddYears(-request.MinAge));
+      query = query.Where(x => x.Birthday >= minAgeDate && x.Birthday <= maxAgeDate);
+
+      query = request.OrderBy switch
+      {
+        "created" => query.OrderByDescending(x => x.Created),
+        "lastActive" => query.OrderByDescending(x => x.LastActive),
+        _ => query.OrderByDescending(x => x.Birthday)
+      };
+
+      return await Pagination.CreateAsync(query, request.PageNumber, request.PageSize);
     }
   }
 }
