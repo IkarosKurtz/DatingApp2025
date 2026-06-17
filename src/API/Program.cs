@@ -61,48 +61,51 @@ public static class Program
       logger.LogError(ex, "Migration process failed!");
     }
 
+    // Configure the HTTP request pipeline.
     app.UseMiddleware<ExceptionMiddleware>();
     if (app.Environment.IsDevelopment())
     {
-      app.UseCors(opt =>
-      {
-        opt.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()
-          .WithOrigins(
-            "http://localhost:4200",
-            "https://localhost:4200"
-        );
-      });
+      app.UseCors(x => x.AllowAnyHeader()
+      .AllowAnyMethod()
+      .WithOrigins(
+          "http://localhost:4200",
+          "https://localhost:4200"
+      ));
+
       app.UseDeveloperExceptionPage();
     }
-
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
-
     app.Run();
+  }
+
+  private static void AddServiceDefaults(WebApplicationBuilder builder)
+  {
+    builder.Services.AddCors();
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+          var tokenKey = builder.Configuration["TokenKey"]
+                  ?? throw new ArgumentNullException("Cannot get the token key - Program.cs");
+          options.TokenValidationParameters = new TokenValidationParameters
+          {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+          };
+        });
+    builder.Services.AddAuthorizationBuilder()
+        .AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"))
+        .AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin", "Moderator"));
   }
 
   private static void AddDbContext(WebApplicationBuilder builder)
   {
     builder.Services.AddDbContext<AppDbContext>(opt =>
     {
-      opt.UseSqlite(builder.Configuration.GetConnectionString("SQLiteConnection"));
-    });
-  }
-
-  private static void AddServiceDefaults(WebApplicationBuilder builder)
-  {
-    builder.Services.AddCors();
-    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-    {
-      var tokenKey = builder.Configuration["TokenKey"] ?? throw new ArgumentNullException("TokenKey not found in configuration.");
-      options.TokenValidationParameters = new TokenValidationParameters
-      {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
-        ValidateIssuer = false,
-        ValidateAudience = false
-      };
+      opt.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnection"));
     });
   }
 
