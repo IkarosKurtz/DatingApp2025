@@ -1,8 +1,9 @@
-import { Component, computed, inject, input } from "@angular/core";
-import { RouterLink } from "@angular/router";
-import { AgePipe } from "../../../core/pipes/age-pipe";
-import { LikesService } from "../../../core/services/likes-service";
-import { Member } from "../../../types/member";
+import { Component, computed, inject, input } from "@angular/core"
+import { RouterLink } from "@angular/router"
+import { AgePipe } from '../../../core/pipes/age-pipe'
+import { LikesService } from '../../../core/services/likes-service'
+import { PresenceService } from '../../../core/services/presence-service'
+import { Member } from "../../../types/member"
 
 @Component({
   selector: "app-member-card",
@@ -12,9 +13,9 @@ import { Member } from "../../../types/member";
 })
 export class MemberCard {
   private likesService = inject(LikesService);
-  protected hasLiked = computed(() =>
-    this.likesService.likedIds().includes(this.member().id),
-  );
+  private presenceService = inject(PresenceService);
+  protected hasLiked = computed(() => this.likesService.likedIds().includes(this.member().id));
+  protected isOnline = computed(() => this.presenceService.onlineUsers().includes(this.member().id));
   member = input.required<Member>();
 
   toggleLike(event: Event) {

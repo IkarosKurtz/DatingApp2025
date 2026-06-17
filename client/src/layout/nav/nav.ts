@@ -1,21 +1,17 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  signal,
-  WritableSignal,
-} from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { Router, RouterLink, RouterLinkActive } from "@angular/router";
-import { AccountService } from "../../core/services/account-service";
-import { BusyService } from "../../core/services/busy-service";
-import { ToastService } from "../../core/services/toast-service";
-import { themes } from "../theme";
+import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core'
+import { FormsModule } from '@angular/forms'
+import { Router, RouterLink, RouterLinkActive } from '@angular/router'
+import { AccountService } from '../../core/services/account-service'
+import { BusyService } from '../../core/services/busy-service'
+import { ToastService } from '../../core/services/toast-service'
+import { HasRole } from '../../shared/directives/has-role'
+import { themes } from '../theme'
+
 @Component({
-  selector: "app-nav",
-  imports: [FormsModule, RouterLink, RouterLinkActive],
-  templateUrl: "./nav.html",
-  styleUrl: "./nav.css",
+  selector: 'app-nav',
+  imports: [FormsModule, RouterLink, RouterLinkActive, HasRole],
+  templateUrl: './nav.html',
+  styleUrl: './nav.css'
 })
 export class Nav implements OnInit {
   private readonly routerService = inject(Router);

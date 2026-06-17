@@ -1,18 +1,20 @@
-import { Routes } from "@angular/router";
-import { authGuard } from "../core/guards/auth-guard";
-import { preventUnsavedChangesGuard } from "../core/guards/prevent-unsaved-changes-guard";
-import { Home } from "../features/home/home";
-import { Lists } from "../features/lists/lists";
-import { MemberDetail } from "../features/members/member-detail/member-detail";
-import { MemberList } from "../features/members/member-list/member-list";
-import { MemberMessages } from "../features/members/member-messages/member-messages";
-import { MemberPhotos } from "../features/members/member-photos/member-photos";
-import { MemberProfile } from "../features/members/member-profile/member-profile";
-import { memberResolver } from "../features/members/member-resolver";
-import { Messages } from "../features/messages/messages";
-import { NotFound } from "../features/not-found/not-found";
-import { TestErrors } from "../features/test-errors/test-errors";
-import { ServerError } from "../shared/server-error/server-error";
+import { Routes } from '@angular/router'
+import { adminGuard } from '../core/guards/admin-guard'
+import { authGuard } from '../core/guards/auth-guard'
+import { preventUnsavedChangesGuard } from '../core/guards/prevent-unsaved-changes-guard'
+import { Admin } from '../features/admin/admin'
+import { Home } from '../features/home/home'
+import { Lists } from '../features/lists/lists'
+import { MemberDetail } from '../features/members/member-detail/member-detail'
+import { MemberList } from '../features/members/member-list/member-list'
+import { MemberMessages } from '../features/members/member-messages/member-messages'
+import { MemberPhotos } from '../features/members/member-photos/member-photos'
+import { MemberProfile } from '../features/members/member-profile/member-profile'
+import { memberResolver } from '../features/members/member-resolver'
+import { Messages } from '../features/messages/messages'
+import { NotFound } from '../features/not-found/not-found'
+import { TestErrors } from '../features/test-errors/test-errors'
+import { ServerError } from '../shared/server-error/server-error'
 
 export const routes: Routes = [
   { path: "", component: Home },
@@ -41,7 +43,8 @@ export const routes: Routes = [
       },
       { path: "lists", component: Lists },
       { path: "messages", component: Messages },
-    ],
+      { path: "admin", component: Admin, canActivate: [adminGuard] }
+    ]
   },
   { path: "server-error", component: ServerError },
   { path: "errors", component: TestErrors },
